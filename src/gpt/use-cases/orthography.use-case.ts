@@ -1,5 +1,11 @@
-export const orthograpgyCheckUseCase = async () => {
+interface Options {
+  prompt: string;
+}
+
+export const orthograpgyCheckUseCase = async (options: Options) => {
+  const { prompt } = options;
+
   return {
-    hola: 'sss',
+    prompt: prompt,
   };
 };
