@@ -1,6 +1,9 @@
-import { IsString } from 'class-validator';
+import { IsBoolean, IsString } from 'class-validator';
 
-export default class ProsConsDiscussDTO {
+export class ProsConsDiscussDTO {
   @IsString()
   readonly prompt: string;
+
+  @IsBoolean()
+  readonly stream: boolean = false;
 }

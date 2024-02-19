@@ -1,7 +1,9 @@
-import { Body, Controller, Post } from '@nestjs/common';
-import { GptService } from './gpt.service';
-import OrtographyDTO from './dtos/ortrography.dto';
-import ProsConsDiscussDTO from './dtos/pros-cons-discuss.dto';
+import { Body, Controller, HttpStatus, Post, Res } from '@nestjs/common';
+import { Response } from 'express';
+
+import { OrtographyDTO, ProsConsDiscussDTO } from './dtos';
+import GptService from './gpt.service';
+import { Stream } from 'openai/streaming';
 
 @Controller('gpt')
 export class GptController {
@@ -13,7 +15,28 @@ export class GptController {
   }
 
   @Post('pros-cons-discuss')
-  prosConsDicusser(@Body() prosConsDiscusserDTO: ProsConsDiscussDTO) {
-    return this.gptService.prosConsDiscusser(prosConsDiscusserDTO);
+  async prosConsDicusser(
+    @Body() prosConsDiscusserDTO: ProsConsDiscussDTO,
+    @Res() res: Response,
+  ) {
+    console.log(prosConsDiscusserDTO);
+
+    const response =
+      await this.gptService.prosConsDiscusser(prosConsDiscusserDTO);
+
+    res.setHeader('Content-Type', 'application/json');
+    res.status(HttpStatus.OK);
+
+    if (response instanceof Stream) {
+      for await (const chunk of response) {
+        const piece = chunk.choices[0].delta.content || '';
+        console.log(piece);
+        res.write(piece);
+      }
+    } else {
+      res.write(response);
+    }
+
+    res.end();
   }
 }
