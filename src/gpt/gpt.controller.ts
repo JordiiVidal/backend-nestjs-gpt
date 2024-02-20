@@ -30,7 +30,6 @@ export class GptController {
     if (response instanceof Stream) {
       for await (const chunk of response) {
         const piece = chunk.choices[0].delta.content || '';
-        console.log(piece);
         res.write(piece);
       }
     } else {
