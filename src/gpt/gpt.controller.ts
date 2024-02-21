@@ -19,8 +19,6 @@ export class GptController {
     @Body() prosConsDiscusserDTO: ProsConsDiscussDTO,
     @Res() res: Response,
   ) {
-    console.log(prosConsDiscusserDTO);
-
     const response =
       await this.gptService.prosConsDiscusser(prosConsDiscusserDTO);
 

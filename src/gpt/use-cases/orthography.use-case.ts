@@ -46,7 +46,5 @@ export const orthograpgyCheckUseCase = async (
     },
   });
 
-  const jsonResponse = JSON.parse(completion.choices[0].message.content);
-
-  return jsonResponse;
+  return JSON.parse(completion.choices[0].message.content);
 };
